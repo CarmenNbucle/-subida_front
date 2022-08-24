@@ -42,65 +42,62 @@ const Login = () => {
 
   return (
     <>
-       <h1 className="text-sky-600 font-black text-6xl">Iniciar sesión</h1> 
+       <h1 className="text-white font-normal text-4xl text-center">Iniciar sesión</h1> 
        <form 
-            className="my-10 bg-white shadow rounded-lg p-10 "
+            className="my-8 bg-trasnparent shadow rounded-lg p-8 "
             onSubmit={handleSubmit}
         >
 
             {msg && <Alerta alerta={alerta} />}
 
             <div className="my-5 ">
-                <label 
-                    className="uppercase text-gray-600 block text-xl font-bold"
-                    htmlFor="email"
-                >
-                    Email
-                </label>
                 <input
                     id="email"
                     type="email"
-                    placeholder="Email de registro"
-                    className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
+                    placeholder="Usuario"
+                    className="w-full mt-3 p-3 text-center placeholder-white border-white border-2 bg-white/[0.2]"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
                 />
             </div>
 
             <div className="my-5 ">
-                <label 
-                    className="uppercase text-gray-600 block text-xl font-bold"
-                    htmlFor="password"
-                >
-                    Contraseña
-                </label>
                 <input
                     id="password"
                     type="password"
                     placeholder="Contraseña"
-                    className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
+                    className="w-full mt-3 p-3 text-center placeholder-white  border-white border-2 bg-white/[0.2]"
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                 />
             </div>
 
-            <input 
-                type="submit"
-                value="Iniciar sesión"
-                className="bg-sky-700 mb-5 w-full py-3 text-white text-xl font-bold rounded hover:cursor-pointer hover:bg-sky-800 transition-colors"
-            />
-       </form>
-       <nav className="lg:flex lg:justify-between">
-            <Link
-                className='block text-center my-5 trxt-slate uppercase text-sm'
-                to="registrar"
-            >¿No tienes cuenta? Regístrate</Link>
+            {/* <nav className="lg:flex lg:justify-between">
+                 <Link
+                    className='block text-center my-5 trxt-slate uppercase text-sm'
+                    to="registrar"
+                >¿No tienes cuenta? Regístrate</Link> */}
 
-            <Link
-                className='block text-center my-5 trxt-slate uppercase text-sm'
-                to="olvide-password"
-            >Olvidé mi contraseña</Link>
-       </nav>
+                <Link
+                    className='block text-center my-5 text-2sm text-white trxt-slate text-sm'
+                    to="olvide-password"
+                >¿Has olvidado la contraseña?</Link>
+            {/* </nav> */}
+            <div className='w-full flex mt-20 justify-center'>
+                <input 
+                    type="submit"
+                    value="Adelante"
+                    className="bg-transparent w-auto mx-10 py-1 px-4 text-white text-xl font-bold border-white border-2 hover:cursor-pointer hover:bg-gray-900 hover:text-gray-200 transition-colors"
+                />
+            </div>
+       </form>
+
+       <p className='w-full flex mt-20 justify-center'>
+        <a href="https://www.nbucle.com/es/">
+            <img className='h-9' src="../src/assets/powered_nbucle.png" alt="Nbucle Creative Communication" />
+        </a>
+       </p>
+       
     </>
   )
 }
