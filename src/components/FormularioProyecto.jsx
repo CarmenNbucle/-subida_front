@@ -1,16 +1,30 @@
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useParams } from "react-router-dom"
 import useProyectos from "../hooks/useProyectos"
 import Alerta from "./Alerta";
 
 const FormularioProyecto = () => {
 
-    const {mostrarAlerta, alerta, submitProyecto} = useProyectos();
-
+    const [id, setId] = useState(null)
     const [nombre, setNombre] = useState('')
     const [descripcion, setDescripcion] = useState('')
     const [fechaEntrega, setFechaEntrega] = useState('')
     const [cliente, setCliente] = useState('')
+
+    const params = useParams();
+    const {mostrarAlerta, alerta, submitProyecto, proyecto} = useProyectos();
+
+    useEffect(() => {
+      if(params.id){
+        setId(proyecto._id)
+        setNombre(proyecto.nombre)
+        setDescripcion(proyecto.descripcion)
+        setFechaEntrega(proyecto.fechaEntrega?.split('T')[0])
+        setCliente(proyecto.cliente)
+      }
+    }, [params])
+
 
     const handleSumbit = async(e) =>{
         e.preventDefault();
@@ -23,7 +37,8 @@ const FormularioProyecto = () => {
         }
 
         //Pasar los datos al provider
-        await submitProyecto({nombre, descripcion, fechaEntrega, cliente})
+        await submitProyecto({id, nombre, descripcion, fechaEntrega, cliente})
+        setId(null)
         setNombre('')
         setDescripcion('')
         setFechaEntrega('')
@@ -100,7 +115,7 @@ const FormularioProyecto = () => {
 
       <input 
         type="submit"
-        value="Crear proyecto"
+        value={id ? 'Actualizar proyecto': 'Crear proyecto'}
         className="bg-black w-full text-gray-200 p-3 font-bold block mt-5 text-center rounded cursor-pointer hover:bg-gray-800 transition-colors"
       />
     </form>

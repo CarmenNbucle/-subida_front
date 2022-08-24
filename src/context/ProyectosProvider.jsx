@@ -1,6 +1,7 @@
 import {useState, useEffect, createContext} from 'react'
 import clienteAxios from '../config/clienteAxios'
 import Alerta from '../components/Alerta';
+import useAuth from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 
 const ProyectosContext = createContext();
@@ -12,8 +13,8 @@ const ProyectosProvider = ({children}) => {
   const [proyecto, setProyecto] = useState({})
   const [cargando, setCargando] = useState(false)
 
-
   const navigate = useNavigate()
+  const { auth } = useAuth()
 
   useEffect ( () => {
     const obtenerProyectos = async() =>{
@@ -33,7 +34,7 @@ const ProyectosProvider = ({children}) => {
         }
       }
     obtenerProyectos()
-  },[])
+  },[auth])
   
   const mostrarAlerta = alerta =>{
     setAlerta(alerta)
@@ -43,6 +44,51 @@ const ProyectosProvider = ({children}) => {
   }
 
   const submitProyecto = async(proyecto) => {
+
+    if(proyecto.id){
+      await editarProyecto(proyecto); 
+    }else{
+      await nuevoProyecto(proyecto);
+    }
+
+   
+  }
+
+  const editarProyecto = async proyecto => {
+    try {
+      const token =  localStorage.getItem('token');
+      if(!token) return
+      const config = {
+        headers:{
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        }
+      }
+      const { data } = await clienteAxios.put(`/proyectos/${proyecto.id}`, proyecto, config)
+
+      // Sincronizar el state
+        const proyectosActualizados = proyectos.map(proyectoState => proyectoState._id === data._id ?  data : proyectoState)
+        setProyectos(proyectosActualizados)
+        
+      // Mostrar alerta
+        setAlerta({
+          msg: "Proyecto creado correctamente",
+          error: false
+        })
+
+        // Redireccionar
+        setTimeout (() => {
+          setAlerta({})
+          navigate('/proyectos')
+        }, 3000)
+
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const nuevoProyecto = async proyecto => {
     try {
       const token =  localStorage.getItem('token');
       if(!token) return
@@ -67,7 +113,6 @@ const ProyectosProvider = ({children}) => {
     }
   }
 
-
   const obtenerProyecto = async id =>{
     setCargando(true)
     try {
@@ -89,6 +134,45 @@ const ProyectosProvider = ({children}) => {
     }
   }
 
+  const eliminarProyecto = async id => {
+    try {
+      const token =  localStorage.getItem('token');
+      if(!token) return
+      const config = {
+        headers:{
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        }
+      }
+      const { data } = await clienteAxios.delete(`/proyectos/${id}`, config)
+
+      // Sincronizar el state
+      const proyectosActualizados = proyectos.filter(proyectoState => proyectoState._id !== id)
+      setProyectos(proyectosActualizados)
+    
+      setAlerta({
+        msg: data.msg,
+        error: false
+      })
+
+      // Redireccionar
+      setTimeout (() => {
+        setAlerta({})
+        navigate('/proyectos')
+      }, 3000)
+
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const cerrarSesionProyectos = () => {
+    setProyectos([])
+    setProyecto({})
+    setAlerta({})
+  }
+
   return (
     <ProyectosContext.Provider
       value={{
@@ -98,7 +182,9 @@ const ProyectosProvider = ({children}) => {
         submitProyecto,
         obtenerProyecto,
         proyecto, 
-        cargando
+        cargando,
+        eliminarProyecto,
+        cerrarSesionProyectos
       }}
     >
       {children}
