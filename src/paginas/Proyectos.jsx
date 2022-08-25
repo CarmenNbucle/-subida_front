@@ -20,7 +20,7 @@ const Proyectos = () => {
               proyecto={proyecto} 
             />
           ))  
-        : <p className="mt-5 mb-5 text-center text-gray-600 uppercase p-5">No hay proyectos aún</p>
+        : <p className="mt-5 mb-5 text-center text-white uppercase p-5">No hay proyectos aún</p>
         }
       </div>
     </>

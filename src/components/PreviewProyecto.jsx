@@ -42,12 +42,14 @@ const PreviewProyecto = ({proyecto}) => {
         <Link
             to={`${_id}`}
         >
-            <div className="bg-[url('./assets/fondo.jpg')] w-550">
-                <div className='finaltarjeta'>
-                    <div><p className='nombre_tarjeta'>{nombre}</p></div>
-                    <div className='medidaporcentaje'>
+            <div className="bg-[url('./assets/fondo.jpg')] bg-cover w-80 h-40">
+                <div className='flex h-full items-end pb-3'>
+                    <p className='uppercase px-3 text-white w-full text-lg'>{nombre}</p>
+                    <div className='text-right px-3'>
                         {/* <label for="file">{datos.reservados}/{datos.total} vendidos</label>
                         <progress id="file" value={datos.porreservados} max="100"> {datos.porreservados}% </progress> */}
+                        <label className='text-white' for="file">X/X vendidos</label>
+                        <progress className='h-2 border-white' id="file" value="30" max="100"> xxx% </progress>
                     </div>
                 </div>
             </div>
